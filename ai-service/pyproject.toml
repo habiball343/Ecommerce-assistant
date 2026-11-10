@@ -1,0 +1,30 @@
+[project]
+name = "ai-service"
+version = "1.0.0"
+description = "电商小二 · 智能服务：理解问题、查询业务数据与知识库、生成并校验回复"
+requires-python = ">=3.12"
+dependencies = [
+    "aiosqlite>=0.21.0",
+    "fastapi>=0.116.0",
+    "httpx>=0.28.1",
+    "langchain>=1.0.0,<2.0.0",
+    "langchain-deepseek>=1.0.0,<2.0.0",
+    "langchain-openai>=1.0.0,<2.0.0",
+    "psycopg[binary]>=3.2.9",
+    "pydantic-settings>=2.10.1",
+    "pyjwt>=2.10.1",
+    "pypdf>=6.0.0",
+    "python-multipart>=0.0.20",
+    "sqlalchemy[asyncio]>=2.0.41",
+    "uvicorn[standard]>=0.35.0",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

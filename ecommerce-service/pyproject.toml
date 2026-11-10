@@ -1,0 +1,23 @@
+[project]
+name = "ecommerce-service"
+version = "1.0.0"
+description = "Self-operated e-commerce users, products, orders, logistics and after-sales APIs"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.116.0",
+  "psycopg[binary]>=3.2.9",
+  "pydantic-settings>=2.10.1",
+  "pyjwt>=2.10.1",
+  "sqlalchemy>=2.0.41",
+  "uvicorn[standard]>=0.35.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.10.0",
+    "ruff>=0.12.4",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

@@ -1,0 +1,47 @@
+# 电商小二 · 基础设施（标准部署）：PostgreSQL（pgvector）+ Redis
+#
+#   启动： docker compose -f deploy/compose.yml up -d --wait     （或直接运行 start-docker.bat）
+#   停止： docker compose -f deploy/compose.yml down
+#   清空： docker compose -f deploy/compose.yml down -v           （连同数据卷一起删除）
+#
+# 端口只绑定到本机 127.0.0.1；如与本机已有的 PostgreSQL / Redis 冲突，
+# 可通过环境变量 XIAOER_PG_PORT / XIAOER_REDIS_PORT 改用其他端口。
+name: xiaoer
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: xiaoer-postgres
+    environment:
+      POSTGRES_USER: customer_service
+      POSTGRES_PASSWORD: customer_service
+      POSTGRES_DB: ecommerce
+    ports:
+      - "127.0.0.1:${XIAOER_PG_PORT:-5432}:5432"
+    volumes:
+      - xiaoer_postgres:/var/lib/postgresql/data
+      # 仅在数据卷为空（首次启动）时执行：创建 customer_service、ai_customer_service 两个库并启用 vector 扩展
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U customer_service -d ecommerce"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: xiaoer-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${XIAOER_REDIS_PORT:-6379}:6379"
+    volumes:
+      - xiaoer_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  xiaoer_postgres:
+  xiaoer_redis:

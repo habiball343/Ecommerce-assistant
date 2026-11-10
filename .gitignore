@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# Local configuration: copy .env.example to .env (start.bat does this automatically).
+# .env may hold your model API key, so it is never committed.
+.env
+.env.*
+!.env.example
+
+# Runtime data (SQLite files, logs, pid files)
+data/
+logs/
+.runtime/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
